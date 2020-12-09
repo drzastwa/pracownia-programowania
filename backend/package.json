@@ -1,0 +1,22 @@
+{
+  "name": "pracownia-programowania-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.ts",
+    "build": "tsc --project ./"
+  },
+  "author": "Kamil Drzastwa",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.9",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.11",
+    "typescript": "^4.1.2"
+  }
+}
