@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.app-container {
+    padding: 35px
+}
+
+.app-content {
+
+}
+
+.users-list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-list td {
+    border: 1px solid black;
+    min-width: 20px;
+}
