@@ -28,13 +28,13 @@ export default class UsersList extends React.Component<UsersListProps> {
                 users ?
                     <>
                         <tr>
-                        <td> id</td>
-                        <td> name</td>
-                        <td>user.surnam</td>
-                        <td>user.login</td>
-                        <td>dateOfBirth</td>
-                        <td>passwordMd5</td>
-                        <td></td>
+                            <td> id</td>
+                            <td> name</td>
+                            <td> surname</td>
+                            <td> login</td>
+                            <td>dateOfBirth</td>
+                            <td>passwordMd5</td>
+                            <td></td>
                         </tr>
 
                         {
