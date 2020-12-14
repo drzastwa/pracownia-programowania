@@ -1,3 +1,12 @@
+button {
+    padding: 15px;
+    border-radius: 10px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -20,5 +29,9 @@
 
 .users-list td {
     border: 1px solid black;
-    min-width: 20px;
+}
+
+.users-list tr:nth-child(1) {
+    font-weight: bold;
+    background: aquamarine;
 }

@@ -1,15 +1,12 @@
 import React from "react";
 import {User} from "../types/user";
+import {deleteUser} from "../backendQueries/queries";
 
 type UsersListItemProps = {
     user: User
 }
 
 export default class UsersListItem extends React.Component<UsersListItemProps> {
-    constructor(props: any) {
-        super(props);
-    }
-
     render() {
         const {user} = this.props;
 
@@ -20,6 +17,9 @@ export default class UsersListItem extends React.Component<UsersListItemProps> {
             <td>{user.login}</td>
             <td>{user.dateOfBirth}</td>
             <td>{user.passwordMd5}</td>
+            <td>
+                <button onClick={() => deleteUser(user.id)}> remove</button>
+            </td>
         </tr>
     }
 }

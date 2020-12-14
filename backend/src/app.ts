@@ -1,10 +1,10 @@
 const express = require('express');
 import User from './models/User';
 import {database} from './database/database';
-import faker from 'faker';
-import {v4 as uuid} from 'uuid';
 
 const cors = require('cors');
+
+const bodyParser = require('body-parser');
 
 
 module.exports = class App {
@@ -12,8 +12,6 @@ module.exports = class App {
     }
 
     async start() {
-
-
         try {
             await database.testConnection();
 
@@ -26,21 +24,20 @@ module.exports = class App {
             const PORT = 8000;
 
             app.use(cors({origin: '*'}));
+            app.use(bodyParser.urlencoded({
+                extended: true
+            }));
+            app.use(bodyParser.json());
 
             //CREATE - POST
             app.post('/user', async (req, res) => {
-                const userData = {
-                    id: uuid(),
-                    name: faker.name.firstName(),
-                    surname: faker.name.lastName(),
-                    login: faker.internet.userName(),
-                    passwordMd5: faker.lorem.word(),
-                    isDeleted: false,
-                };
+                const {user} = req.body;
+                if (user) {
+                    console.log('[+] Adding new user', user);
+                    await models.User.create(user);
+                }
 
-                const createdUser = await models.User.create(userData)
-
-                return res.send(userData);
+                return res.send(req.body);
             });
 
             //READ - GET
@@ -51,7 +48,6 @@ module.exports = class App {
 
             app.get('/user:id', async (req, res) => {
 
-                // return res.send(response);
             });
 
 
@@ -63,12 +59,22 @@ module.exports = class App {
             });*/
 
             //DELETE - DELETE
-            app.delete('/users/:userId', (req, res) => {
-                return res.send(
-                    `DELETE HTTP method on user/${req.params.userId} resource`,
-                );
-            });
 
+            app.delete('/user/:id', (req, res) => {
+                console.log('app delete called!', req.params.id);
+                const {id} = req.params;
+
+                if (id) {
+                    models.User.destroy({
+                        where: {
+                            id: id
+                        }
+                    })
+                }
+                return res.send(
+                    `DELETE HTTP method on user/${id} resource`,
+                );
+            })
 
             app.listen(PORT, () => {
                 console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
