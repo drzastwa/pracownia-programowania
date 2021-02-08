@@ -7,12 +7,18 @@ import Input, {IInputProps} from "./Input";
 interface IAddUserRowProps {
 }
 
+
+type fieldData = {
+    value: string,
+    isValid: boolean,
+}
+
 interface IFieldValues {
-    name: string,
-    surname: string,
-    login: string,
-    dateOfBirth: string,
-    password: string,
+    name: fieldData,
+    surname: fieldData,
+    login: fieldData,
+    dateOfBirth: fieldData,
+    password: fieldData,
 }
 
 interface IAddUserRowState extends IFieldValues {
@@ -34,6 +40,7 @@ const fields: (field & IInputProps)[] = [
         form: FORM_NAME,
         isRequired: true,
         isDisabled: false,
+        isValid: true
     },
     {
         key: "surname",
@@ -42,6 +49,7 @@ const fields: (field & IInputProps)[] = [
         form: FORM_NAME,
         isRequired: true,
         isDisabled: false,
+        isValid: true
     },
     {
         key: "login",
@@ -50,6 +58,7 @@ const fields: (field & IInputProps)[] = [
         form: FORM_NAME,
         isRequired: true,
         isDisabled: false,
+        isValid: true
     },
     {
         key: "dateOfBirth",
@@ -58,6 +67,7 @@ const fields: (field & IInputProps)[] = [
         form: FORM_NAME,
         isRequired: false,
         isDisabled: false,
+        isValid: true
     },
     {
         key: "password",
@@ -66,49 +76,60 @@ const fields: (field & IInputProps)[] = [
         form: FORM_NAME,
         isRequired: true,
         isDisabled: false,
+        isValid: true
     },
 
 
 ];
-
-type fieldData = {
-    value: string,
-    valid: boolean,
-}
 
 export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUserRowState> {
     constructor(props: IAddUserRowProps) {
         super(props);
         this.state = {
             isDisabled: false,
-            name: "",
-            surname: "",
-            login: "",
-            dateOfBirth: "",
-            password: ""
+            name: {
+                value: "",
+                isValid: true
+            },
+            surname: {
+                value: "",
+                isValid: true
+            },
+            login: {
+                value: "",
+                isValid: true
+            },
+            dateOfBirth: {
+                value: "",
+                isValid: true
+            },
+            password: {
+                value: "",
+                isValid: true
+            },
         }
     }
 
-    validateForm(): boolean {
+    isValidateForm(): boolean {
 
-
+        let validationWentThrough = true;
         for (const field of fields) {
-            const {isRequired, key, fieldName} = field;
+            const {isRequired, key} = field;
             if (isRequired) {
-                const inputErrorField = document.getElementById(fieldName + "error");
-
-                if (inputErrorField) {
-                    if (!this.state[key]) {
-                        inputErrorField.style.visibility = "visible";
-                    } else {
-                        inputErrorField.style.visibility = "hidden";
-                    }
+                let tempState = {...this.state};
+                if (!tempState[key].value) {
+                    tempState[key].isValid = false;
+                    validationWentThrough = false;
+                } else {
+                    tempState[key].isValid = true;
                 }
+
+                this.setState(tempState)
             }
         }
 
 
-        return true;
+        return validationWentThrough;
     }
 
 
@@ -118,10 +139,10 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
                 fields.map(({key, isRequired, fieldName, type, form}) => {
                         return <td>
                             <Input
-                                value={this.state[key]}
+                                value={this.state[key].value}
                                 onChange={(event) => {
                                     let stateTemp = {...this.state};
-                                    stateTemp[key] = event.target.value;
+                                    stateTemp[key].value = event.target.value;
                                     console.log('state temp', stateTemp);
                                     this.setState({
                                         ...stateTemp
@@ -130,7 +151,9 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
                                 isRequired={isRequired}
                                 fieldName={fieldName}
                                 type={type} form={form}
-                                isDisabled={this.state.isDisabled}/>
+                                isDisabled={this.state.isDisabled}
+                                isValid={this.state[key].isValid}
+                            />
                         </td>
                     }
                 )
@@ -153,7 +176,7 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
 
             <td>
                 <button
-                    onClick={() => this.validateForm()}
+                    onClick={() => this.isValidateForm()}
                     form={FORM_NAME} type="submit"
                     disabled={this.state.isDisabled}
                 >

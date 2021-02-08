@@ -6,6 +6,7 @@ export interface IInputProps {
     form: string,
     isDisabled: boolean
     isRequired: boolean,
+    isValid: boolean,
     value?: string
     onChange?: (event: any) => void
 }
@@ -16,7 +17,7 @@ export default class Input extends React.Component<IInputProps, any> {
     }
 
     render() {
-        const {fieldName, type, form, isDisabled, isRequired} = this.props;
+        const {fieldName, type, form, isDisabled, isRequired, isValid} = this.props;
         return <div>
             <input required={isRequired}
                    type={type} id={fieldName}
@@ -28,7 +29,7 @@ export default class Input extends React.Component<IInputProps, any> {
             <p
                 style={{
                     color: 'red',
-                    visibility: 'hidden'
+                    visibility: isValid ? 'hidden' : 'visible'
                 }}
                 id={fieldName + "error"}
             >
