@@ -71,6 +71,10 @@ const fields: (field & IInputProps)[] = [
 
 ];
 
+type fieldData = {
+    value: string,
+    valid: boolean,
+}
 
 export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUserRowState> {
     constructor(props: IAddUserRowProps) {
@@ -86,11 +90,24 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
     }
 
     validateForm(): boolean {
+
+
         for (const field of fields) {
-            const {fieldName} = field;
+            const {isRequired, key, fieldName} = field;
+            if (isRequired) {
+                const inputErrorField = document.getElementById(fieldName + "error");
 
-
+                if (inputErrorField) {
+                    if (!this.state[key]) {
+                        inputErrorField.style.visibility = "visible";
+                    } else {
+                        inputErrorField.style.visibility = "hidden";
+                    }
+                }
+            }
         }
+
+
         return true;
     }
 
@@ -135,7 +152,11 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
             {this.renderInputFields()}
 
             <td>
-                <button onClick={() => this.validateForm()} form="form1" type="submit" disabled={this.state.isDisabled}>
+                <button
+                    onClick={() => this.validateForm()}
+                    form={FORM_NAME} type="submit"
+                    disabled={this.state.isDisabled}
+                >
                     add
                 </button>
             </td>
