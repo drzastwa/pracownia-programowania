@@ -16,6 +16,8 @@ export default class User extends Sequelize.Model<UserAttributes, UserAttributes
                 id: {
                     type: Sequelize.DataTypes.INTEGER,
                     primaryKey: true,
+                    autoIncrement: true,
+                    allowNull: true
                 },
                 name: {
                     type: Sequelize.DataTypes.STRING,

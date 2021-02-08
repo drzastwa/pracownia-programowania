@@ -6,9 +6,6 @@ import {User} from "../types/user";
 import {v4 as uuid} from 'uuid';
 import {getTodayDateInString} from "../utils/utils";
 
-interface IAddUserRowProps {
-}
-
 
 type fieldData = {
     value: string,
@@ -21,6 +18,10 @@ interface IFieldValues {
     login: fieldData,
     dateOfBirth: fieldData,
     password: fieldData,
+}
+
+interface IAddUserRowProps {
+    addUserToList: (user: User) => void
 }
 
 interface IAddUserRowState extends IFieldValues {
@@ -112,10 +113,9 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
         }
     }
 
-    saveUser() {
+    saveUser = async () => {
         if (this.formIsValid()) {
             const user: User = {
-                id: uuid(),
                 name: this.state.name.value,
                 surname: this.state.surname.value,
                 login: this.state.login.value,
@@ -125,7 +125,19 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
 
             }
             console.log('we are adding a user biiiitch');
-            addUser(user);
+            this.setState({
+                isDisabled: true
+            }, () => {
+                setTimeout(async () => {
+                    const response = await addUser(user);
+                    console.log('response', response);
+                    this.setState({
+                        isDisabled: false
+                    })
+                }, 1500)
+
+
+            })
         }
     }
 
@@ -157,7 +169,6 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
                 fields.map(({key, isRequired, fieldName, type, form}) => {
                         return <td key={key}>
                             <Input
-                                // key{form + key}
                                 value={this.state[key].value}
                                 onChange={(event) => {
                                     let stateTemp = {...this.state};

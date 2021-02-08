@@ -35,9 +35,18 @@ module.exports = class App {
                 if (user) {
                     console.log('[+] Adding new user', user);
                     await models.User.create(user);
+                } else {
+                    return res.send({
+                        type: "Error",
+                        msg: "Didn't receive any data"
+                    })
                 }
 
-                return res.send(req.body);
+
+                return res.send({
+                    msg: "Successfully added user to database",
+                    user,
+                });
             });
 
             //READ - GET

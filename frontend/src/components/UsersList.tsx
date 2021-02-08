@@ -3,19 +3,46 @@ import UsersListItem from "./UserListItem";
 import AddUserRow from "./AddUserRow";
 import UserListHeader from "./UserListHeader";
 import {User} from "../types/user";
+import {getAllUsers} from "../backendQueries/queries";
 
-type UsersListProps = {
+
+type UsersListState = {
     users: User[]
 }
 
-export default class UsersList extends React.Component<UsersListProps> {
+
+export default class UsersList extends React.Component<any, UsersListState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            users: []
+        }
+    }
+
+    updateUsersList = (users: User[]) => {
+        this.setState({
+            users
+        })
+    }
+
+    componentDidMount() {
+        getAllUsers()
+            .then((response) => {
+                this.updateUsersList(response.data);
+            })
+    }
+
+
     render() {
-        const {users} = this.props;
+        const {users} = this.state;
 
         return <table className={"users-list"}>
             <tbody>
             <UserListHeader/>
-            <AddUserRow />
+            <AddUserRow addUserToList={(user: User) => {
+                this.state.users.push(user)
+            }}/>
+
             {
                 users ?
                     <>

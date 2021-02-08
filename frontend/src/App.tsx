@@ -1,31 +1,12 @@
 import React from 'react';
 import './styles/index.css';
 import UsersList from "./components/UsersList";
-import {User} from "./types/user";
-import {addUser, getAllUsers} from "./backendQueries/queries";
+import {addUser} from "./backendQueries/queries";
 import {generateRandomUser} from "./utils/utils";
 
-type AppState = {
-    users: User[]
-}
-
-class App extends React.Component<any, AppState> {
+class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-
-        this.state = {
-            users: []
-        }
-    }
-
-
-    componentDidMount() {
-        getAllUsers()
-            .then((response) => {
-                this.setState({
-                    users: response.data
-                })
-            })
     }
 
     render() {
@@ -40,7 +21,7 @@ class App extends React.Component<any, AppState> {
                     </button>
 
 
-                    <UsersList users={this.state.users}/>
+                    <UsersList />
                 </div>
             </div>
         );

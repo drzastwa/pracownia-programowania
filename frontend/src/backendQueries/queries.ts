@@ -7,4 +7,4 @@ export const getAllUsers = () => axios.get(SERVER_ADDRESS + '/users')
 
 export const addUser = (user: User) => axios.post(SERVER_ADDRESS + '/user', {user});
 
-export const deleteUser = (id: string) => axios.delete(SERVER_ADDRESS + '/user/' + id);
+export const deleteUser = (id: string | undefined) => axios.delete(SERVER_ADDRESS + '/user/' + id);

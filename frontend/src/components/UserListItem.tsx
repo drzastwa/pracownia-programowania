@@ -9,16 +9,17 @@ type UsersListItemProps = {
 export default class UsersListItem extends React.Component<UsersListItemProps> {
     render() {
         const {user} = this.props;
+        const {id, name, surname, login, dateOfBirth, passwordMd5} = user;
 
         return <tr>
-            <td>{user.id}</td>
-            <td>{user.name}</td>
-            <td>{user.surname}</td>
-            <td>{user.login}</td>
-            <td>{user.dateOfBirth}</td>
-            <td>{user.passwordMd5}</td>
+            <td>{id}</td>
+            <td>{name}</td>
+            <td>{surname}</td>
+            <td>{login}</td>
+            <td>{dateOfBirth}</td>
+            <td>{passwordMd5}</td>
             <td>
-                <button onClick={() => deleteUser(user.id)}> remove</button>
+                <button onClick={() => deleteUser(id)}> remove</button>
             </td>
         </tr>
     }
