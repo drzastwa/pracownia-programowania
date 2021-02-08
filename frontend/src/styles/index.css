@@ -31,7 +31,22 @@ button:hover {
     border: 1px solid black;
 }
 
-.users-list tr:nth-child(1) {
+.users-list .header {
     font-weight: bold;
     background: aquamarine;
+}
+
+.users-list .addUserRow input {
+    border: 1px solid gray;
+    width: 100%;
+}
+
+
+.users-list .addUserRow td{
+    padding: 15px 5px;
+}
+
+
+.users-list .disabledAddUserRow{
+    background-color: darkgrey;
 }

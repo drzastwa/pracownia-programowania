@@ -1,16 +1,8 @@
 import React from "react";
-import {User} from "../types/user";
 import UsersListItem from "./UserListItem";
-
-const usersListHeader: User = {
-    id: "id",
-    name: 'name',
-    surname: 'surname',
-    login: 'login',
-    dateOfBirth: 'dateOfBirth',
-    passwordMd5: 'passwordMd5',
-    isDeleted: false,
-}
+import AddUserRow from "./AddUserRow";
+import UserListHeader from "./UserListHeader";
+import {User} from "../types/user";
 
 type UsersListProps = {
     users: User[]
@@ -22,21 +14,11 @@ export default class UsersList extends React.Component<UsersListProps> {
 
         return <table className={"users-list"}>
             <tbody>
-
-
+            <UserListHeader/>
+            <AddUserRow />
             {
                 users ?
                     <>
-                        <tr>
-                            <td> id</td>
-                            <td> name</td>
-                            <td> surname</td>
-                            <td> login</td>
-                            <td>dateOfBirth</td>
-                            <td>passwordMd5</td>
-                            <td></td>
-                        </tr>
-
                         {
                             users.map((user, key) => {
                                 return <UsersListItem key={key} user={user}/>
