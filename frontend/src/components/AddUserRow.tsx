@@ -1,8 +1,10 @@
 import React from "react";
 import classnames from "classnames";
 import Input, {IInputProps} from "./Input";
-
-// import {getTodayDateInString} from "../utils/utils";
+import {addUser} from "../backendQueries/queries";
+import {User} from "../types/user";
+import {v4 as uuid} from 'uuid';
+import {getTodayDateInString} from "../utils/utils";
 
 interface IAddUserRowProps {
 }
@@ -65,13 +67,13 @@ const fields: (field & IInputProps)[] = [
         fieldName: "Date of 'Birth",
         type: "date",
         form: FORM_NAME,
-        isRequired: false,
+        isRequired: true,
         isDisabled: false,
         isValid: true
     },
     {
         key: "password",
-        fieldName: "Password (MD5)",
+        fieldName: "Password",
         type: "text",
         form: FORM_NAME,
         isRequired: true,
@@ -100,7 +102,7 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
                 isValid: true
             },
             dateOfBirth: {
-                value: "",
+                value: getTodayDateInString(),
                 isValid: true
             },
             password: {
@@ -110,7 +112,24 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
         }
     }
 
-    isValidateForm(): boolean {
+    saveUser() {
+        if (this.formIsValid()) {
+            const user: User = {
+                id: uuid(),
+                name: this.state.name.value,
+                surname: this.state.surname.value,
+                login: this.state.login.value,
+                dateOfBirth: this.state.dateOfBirth.value,
+                passwordMd5: this.state.password.value,
+                isDeleted: false
+
+            }
+            console.log('we are adding a user biiiitch');
+            addUser(user);
+        }
+    }
+
+    formIsValid(): boolean {
 
         let validationWentThrough = true;
         for (const field of fields) {
@@ -132,18 +151,17 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
         return validationWentThrough;
     }
 
-
     renderInputFields() {
         return <>
             {
                 fields.map(({key, isRequired, fieldName, type, form}) => {
-                        return <td>
+                        return <td key={key}>
                             <Input
+                                // key{form + key}
                                 value={this.state[key].value}
                                 onChange={(event) => {
                                     let stateTemp = {...this.state};
                                     stateTemp[key].value = event.target.value;
-                                    console.log('state temp', stateTemp);
                                     this.setState({
                                         ...stateTemp
                                     })
@@ -176,7 +194,7 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
 
             <td>
                 <button
-                    onClick={() => this.isValidateForm()}
+                    onClick={() => this.saveUser()}
                     form={FORM_NAME} type="submit"
                     disabled={this.state.isDisabled}
                 >

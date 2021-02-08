@@ -18,7 +18,7 @@ export default class UserListHeader extends React.Component<any, any> {
         let attributeKey: keyof typeof usersListHeader;  // Type is "one" | "two" | "three"
         for (attributeKey in usersListHeader) {
             const attribute = usersListHeader[attributeKey]
-            attributesCells.push(<td> {attribute}</td>)
+            attributesCells.push(<td key={attributeKey}> {attribute}</td>)
         }
 
 
