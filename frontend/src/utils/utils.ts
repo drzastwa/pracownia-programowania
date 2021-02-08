@@ -12,3 +12,9 @@ export const generateRandomUser = (): User => {
         isDeleted: false,
     };
 }
+
+export const getTodayDateInString = (): string => {
+    const curr = new Date();
+    curr.setDate(curr.getDate());
+    return curr.toISOString().substr(0, 10);
+}
