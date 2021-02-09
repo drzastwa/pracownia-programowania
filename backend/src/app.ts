@@ -1,4 +1,5 @@
 const express = require('express');
+const md5 = require('md5');
 import User from './models/User';
 import {database} from './database/database';
 
@@ -19,7 +20,12 @@ module.exports = class App {
                 User: User.init(database.getSequelizeInstance())
             }
 
-
+            models.User.beforeCreate((async (user) => {
+                const password = user.getDataValue('passwordMd5');
+                const encryptedPassword = await md5(password);
+                user.setDataValue('passwordMd5', encryptedPassword);
+            }))
+            
             const app = express();
             const PORT = 8000;
 
@@ -34,19 +40,15 @@ module.exports = class App {
                 const {user} = req.body;
                 if (user) {
                     console.log('[+] Adding new user', user);
-                    await models.User.create(user);
+                    const createdModel = await models.User.create(user);
+                    return res.send(createdModel);
+
                 } else {
-                    return res.send({
+                    return res.senxd({
                         type: "Error",
-                        msg: "Didn't receive any data"
                     })
                 }
 
-
-                return res.send({
-                    msg: "Successfully added user to database",
-                    user,
-                });
             });
 
             //READ - GET

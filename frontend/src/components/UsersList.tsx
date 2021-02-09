@@ -3,13 +3,12 @@ import UsersListItem from "./UserListItem";
 import AddUserRow from "./AddUserRow";
 import UserListHeader from "./UserListHeader";
 import {User} from "../types/user";
-import {getAllUsers} from "../backendQueries/queries";
-
+import {addUser, getAllUsers} from "../backendQueries/queries";
+import {generateRandomUser} from "../utils/utils";
 
 type UsersListState = {
     users: User[]
 }
-
 
 export default class UsersList extends React.Component<any, UsersListState> {
     constructor(props: any) {
@@ -19,43 +18,51 @@ export default class UsersList extends React.Component<any, UsersListState> {
         }
     }
 
-    updateUsersList = (users: User[]) => {
-        this.setState({
-            users
-        })
-    }
-
     componentDidMount() {
         getAllUsers()
             .then((response) => {
-                this.updateUsersList(response.data);
+                this.setState({
+                    users: response.data
+                })
             })
     }
-
 
     render() {
         const {users} = this.state;
 
-        return <table className={"users-list"}>
-            <tbody>
-            <UserListHeader/>
-            <AddUserRow addUserToList={(user: User) => {
-                this.state.users.push(user)
-            }}/>
+        return <div>
+            <button onClick={async () => {
+                const user = generateRandomUser();
+                const response = await addUser(user);
+                console.log('response ', response);
+                this.setState({
+                    users: [...this.state.users, response.data]
+                });
+            }}>
+                Add Random user to DB
+            </button>
 
-            {
-                users ?
-                    <>
-                        {
-                            users.map((user, key) => {
-                                return <UsersListItem key={key} user={user}/>
-                            })
-                        }
-                    </>
-                    :
-                    <p> There aren't any users at the database! </p>
-            }
-            </tbody>
-        </table>
+            <table className={"users-list"}>
+                <tbody>
+                <UserListHeader/>
+                <AddUserRow updateUsersList={(user: User) => {
+                    this.state.users.push(user);
+                }}/>
+
+                {
+                    users ?
+                        <>
+                            {
+                                users.map((user, key) => {
+                                    return <UsersListItem key={key} user={user}/>
+                                })
+                            }
+                        </>
+                        :
+                        <p> There aren't any users at the database! </p>
+                }
+                </tbody>
+            </table>
+        </div>
     }
 }

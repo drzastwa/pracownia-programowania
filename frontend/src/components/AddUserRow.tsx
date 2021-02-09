@@ -3,7 +3,6 @@ import classnames from "classnames";
 import Input, {IInputProps} from "./Input";
 import {addUser} from "../backendQueries/queries";
 import {User} from "../types/user";
-import {v4 as uuid} from 'uuid';
 import {getTodayDateInString} from "../utils/utils";
 
 
@@ -21,7 +20,7 @@ interface IFieldValues {
 }
 
 interface IAddUserRowProps {
-    addUserToList: (user: User) => void
+    updateUsersList: (user: User) => void
 }
 
 interface IAddUserRowState extends IFieldValues {
@@ -128,21 +127,23 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
             this.setState({
                 isDisabled: true
             }, () => {
+                console.log('pickaaaa')
+
                 setTimeout(async () => {
+                    console.log('pickaaaa')
                     const response = await addUser(user);
+                    console.log('ce es kurwa');
                     console.log('response', response);
+                    this.props.updateUsersList(response.data.user);
                     this.setState({
                         isDisabled: false
                     })
-                }, 1500)
-
-
+                }, 1500);
             })
         }
     }
 
     formIsValid(): boolean {
-
         let validationWentThrough = true;
         for (const field of fields) {
             const {isRequired, key} = field;

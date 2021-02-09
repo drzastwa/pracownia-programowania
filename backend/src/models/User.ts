@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
+const md5 = require("md5");
 
 type UserAttributes = {
-    id: number,
+    id?: string,
     name: string,
     surname: string,
     login: string,
@@ -14,10 +15,9 @@ export default class User extends Sequelize.Model<UserAttributes, UserAttributes
     static init(sequelize) {
         return super.init({
                 id: {
-                    type: Sequelize.DataTypes.INTEGER,
+                    type: Sequelize.DataTypes.UUIDV4,
+                    defaultValue: Sequelize.UUIDV4,
                     primaryKey: true,
-                    autoIncrement: true,
-                    allowNull: true
                 },
                 name: {
                     type: Sequelize.DataTypes.STRING,
@@ -41,7 +41,6 @@ export default class User extends Sequelize.Model<UserAttributes, UserAttributes
                 isDeleted: {
                     type: Sequelize.DataTypes.BOOLEAN,
                     allowNull: false,
-
                 }
             }, {
                 tableName: 'users',
@@ -50,7 +49,10 @@ export default class User extends Sequelize.Model<UserAttributes, UserAttributes
             },
         );
     }
-
-    f
 }
 
+
+
+// User.afterCreate((user) => {
+//     console.log('i am creating user biiiiiitch', user);
+// });
