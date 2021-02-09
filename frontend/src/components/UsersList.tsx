@@ -27,6 +27,19 @@ export default class UsersList extends React.Component<any, UsersListState> {
             })
     }
 
+    addUserToList = (user: User) => {
+        this.setState({
+            users: [...this.state.users, user]
+        });
+    }
+
+    removeUserFromList = (id: string) => {
+        const filteredArray = this.state.users.filter((user) => user.id !== id);
+        this.setState({
+            users: [...filteredArray]
+        })
+    }
+
     render() {
         const {users} = this.state;
 
@@ -35,9 +48,9 @@ export default class UsersList extends React.Component<any, UsersListState> {
                 const user = generateRandomUser();
                 const response = await addUser(user);
                 console.log('response ', response);
-                this.setState({
-                    users: [...this.state.users, response.data]
-                });
+                if (response.status === 200) {
+                    this.addUserToList(response.data);
+                }
             }}>
                 Add Random user to DB
             </button>
@@ -45,16 +58,20 @@ export default class UsersList extends React.Component<any, UsersListState> {
             <table className={"users-list"}>
                 <tbody>
                 <UserListHeader/>
-                <AddUserRow updateUsersList={(user: User) => {
-                    this.state.users.push(user);
-                }}/>
+                <AddUserRow
+                    addUserToList={this.addUserToList}
+                />
 
                 {
                     users ?
                         <>
                             {
                                 users.map((user, key) => {
-                                    return <UsersListItem key={key} user={user}/>
+                                    return <UsersListItem
+                                        key={key}
+                                        user={user}
+                                        removeUserFromList={this.removeUserFromList}
+                                    />
                                 })
                             }
                         </>

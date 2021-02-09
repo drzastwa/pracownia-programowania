@@ -25,7 +25,7 @@ module.exports = class App {
                 const encryptedPassword = await md5(password);
                 user.setDataValue('passwordMd5', encryptedPassword);
             }))
-            
+
             const app = express();
             const PORT = 8000;
 
@@ -53,7 +53,11 @@ module.exports = class App {
 
             //READ - GET
             app.get('/users', async (req, res) => {
-                const response = await models.User.findAll();
+                const response = await models.User.findAll({
+                    where: {
+                        isDeleted: false
+                    }
+                });
                 return res.send(response);
             });
 
@@ -71,17 +75,21 @@ module.exports = class App {
 
             //DELETE - DELETE
 
-            app.delete('/user/:id', (req, res) => {
+            app.delete('/user/:id', async (req, res) => {
                 console.log('app delete called!', req.params.id);
                 const {id} = req.params;
 
-                if (id) {
-                    models.User.destroy({
-                        where: {
-                            id: id
-                        }
-                    })
-                }
+                const user = await models.User.findAll({
+                    where: {
+                        id
+                    }
+                })
+                console.log('deleting user!', user[0].getDataValue('surname'), user[0].getDataValue('isDeleted'));
+
+                await user[0].update({
+                    isDeleted: true
+                });
+
                 return res.send(
                     `DELETE HTTP method on user/${id} resource`,
                 );

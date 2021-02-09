@@ -29,7 +29,7 @@ export default class User extends Sequelize.Model<UserAttributes, UserAttributes
                 },
                 login: {
                     type: Sequelize.DataTypes.STRING,
-                    allowNull: false
+                    allowNull: false,
                 },
                 dateOfBirth: {
                     type: Sequelize.DataTypes.DATEONLY,

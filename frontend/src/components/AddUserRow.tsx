@@ -5,7 +5,6 @@ import {addUser} from "../backendQueries/queries";
 import {User} from "../types/user";
 import {getTodayDateInString} from "../utils/utils";
 
-
 type fieldData = {
     value: string,
     isValid: boolean,
@@ -20,7 +19,7 @@ interface IFieldValues {
 }
 
 interface IAddUserRowProps {
-    updateUsersList: (user: User) => void
+    addUserToList: (user: User) => void
 }
 
 interface IAddUserRowState extends IFieldValues {
@@ -123,22 +122,16 @@ export default class AddUserRow extends React.Component<IAddUserRowProps, IAddUs
                 isDeleted: false
 
             }
-            console.log('we are adding a user biiiitch');
             this.setState({
                 isDisabled: true
-            }, () => {
-                console.log('pickaaaa')
-
-                setTimeout(async () => {
-                    console.log('pickaaaa')
-                    const response = await addUser(user);
-                    console.log('ce es kurwa');
-                    console.log('response', response);
-                    this.props.updateUsersList(response.data.user);
+            }, async () => {
+                const response = await addUser(user);
+                if (response.status === 200) {
+                    this.props.addUserToList(response.data);
                     this.setState({
                         isDisabled: false
                     })
-                }, 1500);
+                }
             })
         }
     }

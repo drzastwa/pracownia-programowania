@@ -3,7 +3,8 @@ import {User} from "../types/user";
 import {deleteUser} from "../backendQueries/queries";
 
 type UsersListItemProps = {
-    user: User
+    user: User,
+    removeUserFromList: (id: string) => void
 }
 
 export default class UsersListItem extends React.Component<UsersListItemProps> {
@@ -19,7 +20,14 @@ export default class UsersListItem extends React.Component<UsersListItemProps> {
             <td>{dateOfBirth}</td>
             <td>{passwordMd5}</td>
             <td>
-                <button onClick={() => deleteUser(id)}> remove</button>
+                <button onClick={async () => {
+                    const response = await deleteUser(user.id!);
+                    if (response.status === 200) {
+                        this.props.removeUserFromList(user.id!);
+                    }
+                }}>
+                    remove
+                </button>
             </td>
         </tr>
     }
